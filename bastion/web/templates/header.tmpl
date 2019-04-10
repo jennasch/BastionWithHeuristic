@@ -1,0 +1,91 @@
+{{ define "header" }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SSH Bastion Admin</title>
+
+    <!-- Bootstrap Start -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/darkly/bootstrap.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap End -->
+
+    <!-- Data Tables Start -->
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.39/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.39/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
+
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.bootstrap4.min.css" rel="stylesheet">
+    <!-- Data Tables End -->
+
+    <!-- Asciinema Start -->
+    <link rel="stylesheet" href="https://gist.githack.com/antoniomika/721c484ed43dd9f14998d1061c60fdfd/raw/asciinema-player.css" />
+    <script src="https://gist.githack.com/antoniomika/721c484ed43dd9f14998d1061c60fdfd/raw/asciinema-player.js"></script>
+    <!-- Asciinema Stop -->
+
+    <!-- XTerm -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.10.0/xterm.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.10.0/addons/fullscreen/fullscreen.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.10.0/addons/fit/fit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.10.0/addons/attach/attach.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.10.0/xterm.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.10.0/addons/fullscreen/fullscreen.min.css" />
+    <!-- XTerm -->
+
+    <!-- Main Start -->
+    <script src="js/main.js"></script>
+
+    <link href="css/main.css" rel="stylesheet">
+    <!-- Main End -->
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-primary" role="navigation">
+    <a class="navbar-brand" href="/">SSH Bastion Admin</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar">
+        <ul class="navbar-nav mr-auto">
+            {{ if .Admin }}
+                <li class="nav-item">
+                    <a class="nav-link" href="/sessions">Sessions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/livesessions">Live Sessions</a>
+                </li class="nav-item">
+                <li>
+                    <a class="nav-link" href="/users">Users</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="/authrules">Auth Rules</a>
+                </li>
+            {{ end }}
+        </ul>
+        <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+            <li class="nav-item">
+                <a class="nav-link" href="/logout"><i class="fa fa-user"></i> {{.Email}} - Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div id="pageContainer" class="container">
+{{ end }}

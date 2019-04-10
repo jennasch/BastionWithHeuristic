@@ -1,0 +1,144 @@
+{{ define "session" }}
+{{ template "header" .}}
+<div class="row">
+    <div id="sessions" style="width: 100%"><h4>Sessions:</h4>
+        <table class="table table-striped table-bordered dt-responsive nowrap" id="sessions-table" cellspacing="0" width="100%">
+            <thead id="table-head-1">
+            <tr id="table-head-row-1">
+                <th>#</th>
+                <th>Host</th>
+                <th>Email</th>
+                <th>Users</th>
+                <th>Name</th>
+                <th>Play</th>
+                <th>Play With Users</th>
+                <th>Command</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="playModal" tabindex="-1" role="dialog" aria-labelledby="playModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="playModalTitle">Session - Play/Pause (space) - Toggle Full Screen (f) - r/ff 5s (<-/->) - Jump to % (0...9) - Inc/dec speed (&lt;/&gt;) </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="playerSessionModal">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function playCast(id) {
+        $('#playerSessionModal').html(`
+            <asciinema-player id="sessionPlayer" poster="npt:0:0.1" font-size="small" preload="true" cols="1000" rows="40" src="/api/sessions/${id}" idle-time-limit="1"></asciinema-player>
+        `);
+
+        $('#playModal').modal({
+            show: true
+        });
+    }
+
+    function playCastTerm(id) {
+        $('#playerSessionModal').html(`
+            <div id="terminal-container"></div>
+        `);
+
+        $('#playModal').modal({
+            show: true
+        });
+
+        $('#playModal').on('shown.bs.modal', function (e) {
+            $.get(`/api/sessions/${id}`, function(data) {
+                var users = {};
+                var usedColors = [];
+                
+                term = createTerminal();
+
+                var lastTime = 0;
+                data.split("\n").forEach(function(data) {
+                    try {
+                        var foo = JSON.parse(data);
+                        if (Array.isArray(foo)) {
+                            if (!(foo[3] in users)) {
+                                function getColor() {
+                                    var colors = Object.keys(codes);
+                                    var color = colors[Math.floor(Math.random() * colors.length)];
+                                    if (usedColors.indexOf(color) === -1) {
+                                        return color
+                                    } else {
+                                        return getColor();
+                                    }
+                                }
+                                var color = getColor();
+                                users[foo[3]] = styles[color];
+                            }
+
+                            var open = users[foo[3]].open,
+                                close = users[foo[3]].close;
+
+                            var time = foo[0] * 1000;
+                            if (time - lastTime > 3000) {
+                                time = lastTime + 3000;
+                            }
+                            lastTime = time;
+
+                            setTimeout(function() {
+                                term.write(open + foo[2] + close);
+                            }, time);
+                        }
+                    } catch(e) {
+                        return;
+                    }
+                });
+            });
+        });
+    }
+
+    $(function() {
+        $('#playModal').on('hidden.bs.modal', function () {
+            if (typeof term != 'undefined') {
+                term.clear();
+            }
+        });
+
+        sessions_table = $('#sessions-table').DataTable({
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            serverSide: true,
+            ajax: '/api/sessions',
+            order: [[0, 'desc']],
+            columnDefs: [{
+                targets: 5,
+                render: function (data, type, row, meta) {
+                    return `<td><button onclick="playCast('${data}')" class="btn btn-primary">Play</button></td>`;
+                }
+            }, {
+                targets: 6,
+                render: function (data, type, row, meta) {
+                    return `<td><button onclick="playCastTerm('${data}')" class="btn btn-primary">Play With Users</button></td>`;
+                }
+            }, {
+                targets: 7,
+                render: function (data, type, row, meta) {
+                    return `<pre>${escapeHtml(data)}</pre>`;
+                }
+            }]
+        });
+        sessions_table.buttons().container().appendTo('#sessions-table_wrapper .col-sm-6:eq(0)');
+    })
+</script>
+{{ template "footer" .}}
+{{ end }}

@@ -1,0 +1,51 @@
+cookiesecret: s0secure
+dbinfo:
+  host: localhost
+  name: JennaSchwartz
+  pass: JennasPassword
+  port: 3306
+  sqlite: true
+  user: jenna
+debug:
+  db:
+    enabled: true
+  ssh:
+    enabled: true
+  web:
+    enabled: true
+gce:
+  bucket:
+    enabled: true
+    name: example-logs
+  iap:
+    aud: /projects/0000000000000/global/backendServices/000000000000000000
+    enabled: false
+    hd:
+    - example.com
+    issuer: https://cloud.google.com/iap
+  lb:
+    enabled: false
+    proxyproto:
+      enabled: false
+multihost:
+  enabled: false
+  hostname: ""
+  ip: ""
+oauthcredentials:
+  clientid: 410608294662-ohk6vtn9hn97f3jm1au2kdecd3m57t9u.apps.googleusercontent.com
+  clientsecret: 3X72QfdjjXwFmHCalTlLvtbt
+  endpoint:
+    authurl: https://accounts.google.com/o/oauth2/auth
+    tokenurl: https://accounts.google.com/o/oauth2/token
+  redirecturl: http://localhost:8080
+  scopes:
+  - https://www.googleapis.com/auth/userinfo.email
+otp:
+  enabled: false
+  issuer: example.com
+pkpassphrase: ""
+sessions:
+  directory: sessions
+  enabled: true
+sshcert:
+  graceperiod: 4h
